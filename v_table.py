@@ -8,7 +8,7 @@ class VTable:
         letters = len(Config.letters)
         numbers = len(Config.numbers)
         orientations = len(Config.orientations)
-        self._v = np.zeros((letters, numbers, orientations), dtype=np.float32) - 1000
+        self._v = np.zeros((letters, numbers, orientations), dtype=np.float32)# - 1000
 
     def __setitem__(self, key, value):
         i, j, o = key

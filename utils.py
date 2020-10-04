@@ -11,7 +11,7 @@ def orientation_to_str(o):
     return Config.orientations[o]  # 0 - forward, 1 - right, 2 - backward, 3 - left
 
 
-_orientation_index = {a: i for i, a in Config.orientations}
+_orientation_index = {a: i for i, a in enumerate(Config.orientations)}
 
 
 def parse_orientation(o_str):
@@ -27,7 +27,7 @@ def action_to_str(a):
     return Config.actions[a]  # 0 - move forward, 1 - rotate right, 2 - rotate left
 
 
-_action_index = {a: i for i, a in Config.actions}
+_action_index = {a: i for i, a in enumerate(Config.actions)}
 
 
 def parse_action(a):
@@ -38,7 +38,7 @@ def parse_action(a):
 
 def parse_position(p):
     i = ord(p[0]) - ord(Config.letters[0])  # ord('a') = 97
-    j = ord(p[1]) - ord(Config.numbers)  # ord('1') = 49
+    j = ord(p[1]) - ord(Config.numbers[0])  # ord('1') = 49
     assert 0 <= i < len(Config.letters)
     assert 0 <= j < len(Config.numbers)
     return i, j
@@ -51,6 +51,8 @@ def parse_state(s):
 
 
 def state_to_str(s):
+    if not s:
+        return 'None'
     i, j, o = s
     return position_to_str((i, j)) + orientation_to_str(o)
 
@@ -64,3 +66,15 @@ def parse_edge(edge):
     i2, j2 = s2
     assert abs(i1 - i2) <= 1 and abs(j1 - j2) <= 1, "Positions " + s1_str + " and " + s2_str + " are not adjacent."
     return s1, s2
+
+
+def transition_to_str(transition):
+    s1, s2 = transition
+
+    return state_to_str(s1) + "->" + state_to_str(s2)
+
+
+def edge_to_str(edge):
+    p1, p2 = edge
+
+    return position_to_str(p1) + "->" + position_to_str(p2)

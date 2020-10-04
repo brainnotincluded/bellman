@@ -1,6 +1,10 @@
 from q_table import QTable
 from transitions import Transitions
+from utils import state_to_str, action_to_str
 from v_table import VTable
+from rewarder import Rewarder
+from config import Config
+
 
 
 class ValueIterator:
@@ -13,16 +17,18 @@ class ValueIterator:
 
     def update(self):
         for s in self.all_states():
-            for a in range(3):
+            for a in range(len(Config.actions)):
                 s1 = self._tran.run(s, a)
+                # tran_str = state_to_str(s) + "-" + action_to_str(a) + "->" + state_to_str(s1)
+                # print(tran_str)
                 if s1:
                     rew = self._rewards[s, s1]
-                    self._q_tab[s, a] = rew + 0.7 * self._v_tab[s1]
+                    self._q_tab[s, a] = rew + 0.9 * self._v_tab[s1]
                 else:  # punish impossible transition
                     self._q_tab[s, a] = -1000.
 
         for s in self.all_states():
-            for a in range(3):
+            for a in range(len(Config.actions)):
                 _, q = self._q_tab.get_best_action(s)
                 self._v_tab[s] = q
 

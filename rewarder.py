@@ -1,7 +1,7 @@
 from pprint import pprint_map
 
 from config import Config
-from utils import parse_edge, parse_position
+from utils import parse_edge, parse_position, transition_to_str
 
 
 class Rewarder:
@@ -32,14 +32,14 @@ class Rewarder:
         # преобразуем переход между состояниями в переход между позициями, т.е. убираем ориентацию
         edge = self._to_positions(transition)
 
-        # тут вознаграждается переход в целевую позицию, если она заданна (т.е. не None)
-        if self.target_position and edge[1] == self.target_position:
-            return 100.
-
         # ищем ревард по таблице (по словарю)
         reward = self._reward.get(edge)
         if reward:  # если ревард найден то возвращаем его
+            # print(transition_to_str(transition), " : ", reward)
             return reward
+            # тут вознаграждается переход в целевую позицию, если она заданна (т.е. не None)
+        elif self.target_position and edge[1] == self.target_position:
+            return 10.
         else:  # если ревард НЕ найден то возвращаем значение по умолчанию
             return Config.edge_default_weight
 
