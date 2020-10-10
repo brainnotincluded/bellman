@@ -1,11 +1,18 @@
 class Config:
+    #
+    gamma = 1.
+    v0 = 0.
+    q0 = 0.
+    target_transition_reward = 0.
+    #
     letters = 'abcdefg'
     numbers = '12345'
     orientations = 'frbl'
     actions = 'frl'
 
+    #
     edges = {
-        ('a1', 'a2'): -100.,
+        ('a1', 'a2'): -46.,
         ('a4', 'b4'): -100.,
         ('a3', 'b3'): -100.,
         ('a2', 'b2'): -100.,
@@ -29,4 +36,5 @@ class Config:
         ('d2', 'e2'): -100.,
         ('c1', 'd1'): -100.,
     }
-    edge_default_weight = -1.0
+    edge_default_reward = -1.0
+

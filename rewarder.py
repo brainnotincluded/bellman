@@ -29,19 +29,24 @@ class Rewarder:
             self._reward[p2, p1] = weight
 
     def __getitem__(self, transition):
+        _s1, s2 = transition
+        # Если целевое состояние None, т.е. запрещенное, то наказываем переход в него
+        if s2 is None:
+            return -1000.
+
         # преобразуем переход между состояниями в переход между позициями, т.е. убираем ориентацию
         edge = self._to_positions(transition)
 
         # ищем ревард по таблице (по словарю)
         reward = self._reward.get(edge)
-        if reward:  # если ревард найден то возвращаем его
-            # print(transition_to_str(transition), " : ", reward)
-            return reward
-            # тут вознаграждается переход в целевую позицию, если она заданна (т.е. не None)
-        elif self.target_position and edge[1] == self.target_position:
-            return 10.
-        else:  # если ревард НЕ найден то возвращаем значение по умолчанию
-            return Config.edge_default_weight
+        if not reward:  # если ревард НЕ найден то возвращаем значение по умолчанию
+            reward = Config.edge_default_reward
+
+        # тут вознаграждается переход в целевую позицию, если она заданна (т.е. не None)
+        if self.target_position and edge[1] == self.target_position:
+            reward += Config.target_transition_reward
+
+        return reward
 
     @staticmethod
     def _to_positions(transition):

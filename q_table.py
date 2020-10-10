@@ -19,7 +19,7 @@ class QTable:
         numbers = len(Config.numbers)
         orientations = len(Config.orientations)
         actions = len(Config.actions)
-        self._q = np.zeros((letters, numbers, orientations, actions), dtype=np.float32) - 1000
+        self._q = np.zeros((letters, numbers, orientations, actions), dtype=np.float16) + Config.q0
 
     def __setitem__(self, key, value):
         """
@@ -62,3 +62,4 @@ class QTable:
         a = self._q[i, j, o].argmax()
         q = self._q[i, j, o, a]
         return a, q
+

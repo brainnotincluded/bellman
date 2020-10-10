@@ -58,3 +58,12 @@ def pformat_path(path, include_state=True):
             ppath.append(action_to_str(elem))
 
     return ppath
+
+
+def pprint_transition(s1, a, s2, rew):
+    tran_str = state_to_str(s1) + "-" + action_to_str(a) + "->" + state_to_str(s2) + " : " + str(rew)
+    print(tran_str)
+
+
+if __name__ == '__main__':
+    pprint_map()

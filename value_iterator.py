@@ -4,7 +4,7 @@ from utils import state_to_str, action_to_str
 from v_table import VTable
 from rewarder import Rewarder
 from config import Config
-
+from pprint import pprint_transition
 
 
 class ValueIterator:
@@ -15,36 +15,36 @@ class ValueIterator:
         self._q_tab = QTable()
         self._v_tab = VTable()
 
-    def update(self):
-        for s in self.all_states():
+    def update(self, debug=False):
+        for s1 in self.all_states():
             for a in range(len(Config.actions)):
-                s1 = self._tran.run(s, a)
-                # tran_str = state_to_str(s) + "-" + action_to_str(a) + "->" + state_to_str(s1)
-                # print(tran_str)
-                if s1:
-                    rew = self._rewards[s, s1]
-                    self._q_tab[s, a] = rew + 0.9 * self._v_tab[s1]
-                else:  # punish impossible transition
-                    self._q_tab[s, a] = -1000.
+                s2 = self._tran.run(s1, a)
+                rew = self._rewards[s1, s2]
+                if s2:
+                    q = rew + Config.gamma * self._v_tab[s2]
+                else:
+                    q = rew
+                self._q_tab[s1, a] = q
 
-        for s in self.all_states():
-            for a in range(len(Config.actions)):
-                _, q = self._q_tab.get_best_action(s)
-                self._v_tab[s] = q
+                if debug:
+                    pprint_transition(s1, a, s2, rew)
 
+        self._v_tab.update_from_q_table(self._q_tab)
+
+    # noinspection PyMethodMayBeStatic
     def all_states(self):
         for i in range(len(Config.letters)):
             for j in range(len(Config.numbers)):
-                # if (i, j) == self.target_position:
-                #     continue
-                for o in range(4):
+                if (i, j) == self.target_position:
+                    continue
+                for o in range(len(Config.orientations)):
                     yield i, j, o
 
     def path(self, s0):
         a, _ = self._q_tab.get_best_action(s0)
         s1 = self._tran.run(s0, a)
         if not s1:
-            raise ValueError("Forbidden transition: " + s0 + " " + a)
+            raise ValueError("Переход в запрещенное состояние: " + state_to_str(s0) + "-" + action_to_str(a) + "-> None")
         elif (s1[0], s1[1]) == self.target_position:
             return [s0, a, s1]
         return [s0, a] + self.path(s1)
@@ -53,7 +53,7 @@ class ValueIterator:
 if __name__ == '__main__':
     from rewarder import Rewarder
     from config import parse_position, Config, parse_state
-    from pprint import pprint_map, pformat_path
+    from pprint import pprint_map, pformat_path, pprint_transition
 
     target = parse_position('e4')
     vi = ValueIterator(target)
