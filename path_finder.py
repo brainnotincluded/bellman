@@ -1,6 +1,6 @@
-from utils import parse_position, parse_state
-from value_iterator import ValueIterator
-from pprint import pprint_map, pformat_path
+from bellman.utils import parse_position, parse_state, state_to_str
+from bellman.value_iterator import ValueIterator
+from bellman.pprint import pprint_map, pformat_path
 
 """
       a   b   c   d   e   f   g                    Orientations                       Actions
@@ -15,7 +15,7 @@ from pprint import pprint_map, pformat_path
 4     . | .   .   .   .   .   .  
     #   # - # - # - # - # - #   #
 5     .   .   .   .   .   .   .  
-    #   #   #   #   #   #   #   #
+    #   #   #   #   #   #   #   #       
 """
 
 
@@ -64,13 +64,13 @@ def find_path(initial_state: str, target_position: str, iterations=60, debug=Fal
 
     pretty_path = pformat_path(path, include_state=False)
 
-    if debug:
+    if True:
         visualize_plan(path, target)
 
-    return pretty_path
+    return "".join(pretty_path), state_to_str(path[-1])
 
 
 if __name__ == '__main__':
-    path = find_path('a3f', 'f2', debug=True)
+    path = find_path('a3f', 'f2')
     print(path)
 

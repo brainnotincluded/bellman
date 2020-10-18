@@ -1,10 +1,10 @@
-from q_table import QTable
-from transitions import Transitions
-from utils import state_to_str, action_to_str
-from v_table import VTable
-from rewarder import Rewarder
-from config import Config
-from pprint import pprint_transition
+from bellman.q_table import QTable
+from bellman.transitions import Transitions
+from bellman.utils import state_to_str, action_to_str
+from bellman.v_table import VTable
+from bellman.rewarder import Rewarder
+from bellman.config import Config
+from bellman.pprint import pprint_transition
 
 
 class ValueIterator:

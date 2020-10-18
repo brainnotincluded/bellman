@@ -1,5 +1,5 @@
-from config import Config
-from utils import position_to_str, state_to_str, action_to_str
+from bellman.config import Config
+from bellman.utils import position_to_str, state_to_str, action_to_str
 
 
 def pprint_map(data=None):

@@ -1,4 +1,4 @@
-from config import Config
+from bellman.config import Config
 
 
 class Transitions:

@@ -1,7 +1,7 @@
-from pprint import pprint_map
+from bellman.pprint import pprint_map
 
-from config import Config
-from utils import parse_edge, parse_position, transition_to_str
+from bellman.config import Config
+from bellman.utils import parse_edge, parse_position, transition_to_str
 
 
 class Rewarder:

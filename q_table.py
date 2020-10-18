@@ -1,6 +1,6 @@
 import numpy as np
 
-from config import Config
+from bellman.config import Config
 
 
 class QTable:
