@@ -40,14 +40,16 @@ class ValueIterator:
                 for o in range(len(Config.orientations)):
                     yield i, j, o
 
-    def path(self, s0):
+    def path(self, s0, recursion_limit=58):
+        if recursion_limit == 0:
+            raise ValueError('Путь не найден.')
         a, _ = self._q_tab.get_best_action(s0)
         s1 = self._tran.run(s0, a)
         if not s1:
             raise ValueError("Переход в запрещенное состояние: " + state_to_str(s0) + "-" + action_to_str(a) + "-> None")
         elif (s1[0], s1[1]) == self.target_position:
             return [s0, a, s1]
-        return [s0, a] + self.path(s1)
+        return [s0, a] + self.path(s1, recursion_limit - 1)
 
 
 if __name__ == '__main__':
